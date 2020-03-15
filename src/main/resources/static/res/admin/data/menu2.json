@@ -1,0 +1,104 @@
+[
+  {
+    "id": 5,
+    "pid": 1,
+    "title": "系统管理",
+    "type": 0,
+    "icon": "&#xe614;",
+    "spread": false,
+    "href": "",
+    "children": [
+      {
+        "id": 14,
+        "pid": 5,
+        "title": "部门管理",
+        "type": 1,
+        "icon": "&#xe770;",
+        "spread": false,
+        "href": "/sys/toDeptManager",
+        "children": []
+      },
+      {
+        "id": 15,
+        "pid": 5,
+        "title": "菜单管理",
+        "type": 1,
+        "icon": "&#xe857;",
+        "spread": false,
+        "href": "/sys/toMenuManager",
+        "children": []
+      },
+      {
+        "id": 16,
+        "pid": 5,
+        "title": "权限管理",
+        "type": 1,
+        "icon": "&#xe857;",
+        "spread": false,
+        "href": "/sys/toPermissionManager",
+        "children": []
+      },
+      {
+        "id": 17,
+        "pid": 5,
+        "title": "角色管理",
+        "type": 1,
+        "icon": "&#xe650;",
+        "spread": false,
+        "href": "/sys/toRoleManager",
+        "children": []
+      },
+      {
+        "id": 18,
+        "pid": 5,
+        "title": "用户管理",
+        "type": 1,
+        "icon": "&#xe612;",
+        "spread": false,
+        "href": "/sys/toUserManager",
+        "children": []
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "pid": 1,
+    "title": "其它管理",
+    "type": 0,
+    "icon": "&#xe628;",
+    "spread": false,
+    "href": "",
+    "children": [
+      {
+        "id": 21,
+        "pid": 6,
+        "title": "登陆日志",
+        "type": 1,
+        "icon": "&#xe675;",
+        "spread": false,
+        "href": "/sys/toLogLoginManager",
+        "children": []
+      },
+      {
+        "id": 22,
+        "pid": 6,
+        "title": "系统公告",
+        "type": 1,
+        "icon": "&#xe756;",
+        "spread": false,
+        "href": "/sys/toNoticeManager",
+        "children": []
+      },
+      {
+        "id": 23,
+        "pid": 6,
+        "title": "图标管理",
+        "type": 1,
+        "icon": "&#xe670;",
+        "spread": false,
+        "href": "../res/page/icon.html",
+        "children": []
+      }
+    ]
+  }
+]

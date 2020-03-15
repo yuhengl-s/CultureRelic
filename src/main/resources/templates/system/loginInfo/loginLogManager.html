@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>登录日志</title>
+    <link href="/res/assets/css/pearone.css" rel="stylesheet" />
+    <link href="/res/component/layui/css/layui.css" rel="stylesheet" />
+    <link href="/res/component/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="/res/admin/css/pearButton.css" rel="stylesheet"/>
+    <link href="/res/admin/css/pearTable.css" rel="stylesheet"/>
+    <style>
+        body{
+            margin:10px;
+            background: whitesmoke;
+        }
+
+    </style>
+</head>
+<body>
+<div class="layui-card">
+    <div class="layui-card-header">查询条件</div>
+    <blockquote class="layui-elem-quote">
+        <form action="" method="post" id="searchFrm" lay-filter="searchFrm" class="layui-form layui-form-pane">
+            <div class="layui-form-item" style="text-align: center">
+                <div class="layui-inline">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="loginname"  autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">登录ip</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="loginip"    autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <br/>
+                <div class="layui-inline">
+                    <label class="layui-form-label">开始时间</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="startTime" id="startTime" readonly="readonly" placeholder="yyyy-MM-dd HH:mm:ss" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">结束时间</label>
+                    <div class="layui-input-inline">
+                        <input type="tel" name="endTime"  id="endTime"  readonly="readonly" placeholder="yyyy-MM-dd HH:mm:ss" class="layui-input">
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+                <div class="layui-input-block" style="text-align: center;">
+                    <button type="button" class="layui-btn" lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-search"></span>查询</button>
+                    <button type="reset" class="layui-btn layui-btn-warm"><span class="layui-icon layui-icon-refresh-1"></span>重置</button>
+                </div>
+            </div>
+        </form>
+    </blockquote>
+    <div class="layui-card-body">
+
+        <table class="layui-hide" id="demo" lay-filter="test"></table>
+
+        <script type="text/html" id="barDemo">
+            <!--<a class="pear-btn  pear-btn-sm" lay-event="detail">查看</a>-->
+            <!--<a class="pear-btn pear-btn-primary pear-btn-sm" plain lay-event="edit">编辑</a>-->
+            <a class="pear-btn pear-btn-danger pear-btn-sm" plain lay-event="del">删除</a>
+        </script>
+
+    </div>
+</div>
+
+<script src="/res/component/layui/layui.js"></script>
+<script>
+    layui.config({
+        version: '1575404972583' //为了更新 js 缓存，可忽略
+    });
+
+    layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider','jquery'], function() {
+        var laydate = layui.laydate //日期
+            ,laypage = layui.laypage //分页
+            ,layer = layui.layer //弹层
+            ,table = layui.table //表格
+            ,carousel = layui.carousel //轮播
+            ,upload = layui.upload //上传
+            ,element = layui.element //元素操作
+            ,slider = layui.slider //滑块
+            ,$ = layui.jquery //jquery
+            ,form=layui.form
+
+        //初始化时间选择器
+        laydate.render({
+            elem:'#startTime',
+            type:'datetime'
+        });
+        laydate.render({
+            elem:'#endTime',
+            type:'datetime'
+        });
+
+
+        //执行一个 table 实例
+        var tableIns = table.render({
+            elem: '#demo',
+            url: '/loginInfo/loadAllLoginInfo' //数据接口
+            ,title: '登录信息表'
+            ,page: true //开启分页
+            ,toolbar: "default" //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,totalRow: false //开启合计行
+            ,height: 'full-280'
+            ,cols: [
+                [ //表头
+                    {
+                        type: 'checkbox',
+                        fixed: 'left'
+                    }, {
+                    field: 'id',
+                    title: 'ID',
+                    width: 80,
+                    sort: true,
+                    fixed: 'left',
+                    totalRowText: '合计：'
+                }, {
+                    field: 'loginname',
+                    title: '登录用户名',
+                    align:'center'
+                }, {
+                    field: 'loginip',
+                    title: '登录ip',
+                    align:'center'
+                }, {
+                    field: 'logintime',
+                    title: '登录时间',
+                    align:'center'
+                },
+                {
+                    fixed: 'right',
+                    width: 220,
+                    align: 'center',
+                    toolbar: '#barDemo'
+                }
+                ]
+            ]
+        });
+
+        //模糊查询
+        form.on("submit(doSearch)",function(data){
+            tableIns.reload({
+                where:data.field,
+                page:{
+                    curr:1
+                }
+            });
+            return false;
+        });
+
+        //监听头工具栏事件
+        table.on('toolbar(test)', function(obj) {
+            var checkStatus = table.checkStatus(obj.config.id),
+                data = checkStatus.data; //获取选中的数据
+            switch (obj.event) {
+                case 'add':
+                    layer.msg('添加');
+                    break;
+                case 'update':
+                    if (data.length === 0) {
+                        layer.msg('请选择一行');
+                    } else if (data.length > 1) {
+                        layer.msg('只能同时编辑一个');
+                    } else {
+                        layer.alert('编辑 [id]：' + checkStatus.data[0].id);
+                    }
+                    break;
+                case 'delete':
+                    // if (data.length === version1) {
+                    //     layer.msg('请选择一行');
+                    // } else {
+                    //     layer.msg('删除');
+                    //     batchDelete();
+                    // }
+                    batchDelete(checkStatus,data);
+                    break;
+            };
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj) { //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                ,
+                layEvent = obj.event; //获得 lay-event 对应的值
+            if (layEvent === 'detail') {
+                layer.msg('查看操作');
+            } else if (layEvent === 'del') {
+                deleteInfo(data);
+                // layer.confirm('真的删除行么', function(index) {
+                //     obj.del(); //删除对应行（tr）的DOM结构
+                //     layer.close(index);
+                //     //向服务端发送删除指令
+                //     deleteInfo(data);
+                // });
+            } else if (layEvent === 'edit') {
+                layer.msg('编辑操作');
+            }
+        });
+
+        //删除
+        function deleteInfo(data){
+            layer.confirm('你确定要删除这条数据吗?', {icon: 3, title:'提示'}, function(index){
+                $.post("/loginInfo/deleteLoginfo",{id:data.id},function(res){
+                    if(res.code==200){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+
+        //批量删除
+        function  batchDelete(checkStatus,data){
+            //得到选中行
+            var dataLength=data.length;
+            if(dataLength>0){
+                layer.confirm('你确定要删除这些数据吗?', {icon: 3, title:'提示'}, function(index){
+                    var data=checkStatus.data; //获取选中行的数据
+                    var ids="";
+                    $.each(data,function(index,item){
+                        if(index==0){
+                            ids+="ids="+item.id;
+                        }else{
+                            ids+="&ids="+item.id;
+                        }
+                    })
+                    $.post("/loginInfo/batchDeleteLoginfo",ids,function(res){
+                        if(res.code==200){
+                            tableIns.reload();
+                        }
+                        layer.msg(res.msg);
+                    })
+                    layer.close(index);
+                });
+
+            }else{
+                layer.msg("请选中操作行")
+            }
+        }
+
+
+    });
+</script>
+</body>
+</html>
