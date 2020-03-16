@@ -26,31 +26,31 @@ public class MenuController {
     private IPermissionService permissionService;
 
     @RequestMapping("/loadIndexLeftMenuJson")
-    public List<TreeNode> loadIndexLeftMenuJson(PermissionVo permissionVo){
+    public List<TreeNode> loadIndexLeftMenuJson(PermissionVo permissionVo) {
         //查询所有菜单
         QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("type",Constant.TYPE_MNEU);
-        queryWrapper.eq("available",Constant.AVAILABLE_TRUE);
+        queryWrapper.eq("type", Constant.TYPE_MNEU);
+        queryWrapper.eq("available", Constant.AVAILABLE_TRUE);
         //设置只能查到菜单
         User user = (User) WebUtils.getSession().getAttribute("user");
         List<Permission> list = null;
-        if(user.getType()==Constant.USER_TYPE_SUPER){
+        if (user.getType() == Constant.USER_TYPE_SUPER) {
             list = permissionService.list(queryWrapper);
-        }else{
+        } else {
             //根据用户ID+角色+权限去查询 (待完成）
             list = permissionService.list(queryWrapper);
         }
 
-        List<TreeNode> treeNodes=new ArrayList<>();
+        List<TreeNode> treeNodes = new ArrayList<>();
         for (Permission p : list) {
-            Integer id=p.getId();
-            Integer pid=p.getPid();
-            String title=p.getTitle();
-            String icon=p.getIcon();
-            String href=p.getHref();
-            Integer type = p.getType().equals("menu")?0:1;
-            Boolean spread=p.getOpen()==Constant.OPEN_TRUE?true:false;
-            treeNodes.add(new TreeNode(id, pid, title, icon, href, spread,type));
+            Integer id = p.getId();
+            Integer pid = p.getPid();
+            String title = p.getTitle();
+            String icon = p.getIcon();
+            String href = p.getHref();
+            Integer type = p.getType().equals("menu") ? 0 : 1;
+            Boolean spread = p.getOpen() == Constant.OPEN_TRUE ? true : false;
+            treeNodes.add(new TreeNode(id, pid, title, icon, href, spread, type));
         }
         //构造层级关系
         List<TreeNode> list2 = TreeNodeBuilder.build(treeNodes, 1);

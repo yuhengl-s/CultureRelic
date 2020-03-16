@@ -15,7 +15,7 @@ public class SystemController {
      * 跳转到登录页面
      */
     @RequestMapping("/toLogin")
-    public String toLogin(){
+    public String toLogin() {
         return "system/index/login";
     }
 
@@ -23,7 +23,7 @@ public class SystemController {
      * 跳转到首页
      */
     @RequestMapping("/index")
-    public String index(){
+    public String index() {
         return "system/index/index";
     }
 
@@ -31,7 +31,7 @@ public class SystemController {
      * 跳转到首页导航栏右侧桌面
      */
     @RequestMapping("/console")
-    public String console(){
+    public String console() {
         return "system/index/console1";
     }
 
@@ -39,13 +39,12 @@ public class SystemController {
      * 跳转到日志查询frame
      */
     @RequestMapping("/toLogLoginManager")
-    public String toLogLoginManager(){
+    public String toLogLoginManager() {
         return "system/loginInfo/loginLogManager.html";
     }
 
     /**
      * 跳转到菜单管理
-     *
      */
     @RequestMapping("/toMenuManager")
     public String toMenuManager() {
@@ -54,7 +53,6 @@ public class SystemController {
 
     /**
      * 跳转到菜单管理-left
-     *
      */
     @RequestMapping("/toMenuLeft")
     public String toMenuLeft() {
@@ -64,7 +62,6 @@ public class SystemController {
 
     /**
      * 跳转到菜单管理--right
-     *
      */
     @RequestMapping("/toMenuRight")
     public String toMenuRight() {
